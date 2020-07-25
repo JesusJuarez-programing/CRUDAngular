@@ -12,23 +12,31 @@ export class HeroeComponent implements OnInit {
 
   heroe = new HeroeModel();
 
-  constructor( private heroesService: HeroesService ) { }
+  constructor(private heroesService: HeroesService) { }
 
   ngOnInit(): void {
   }
 
-  guardar( form: NgForm ){
+  guardar(form: NgForm) {
     console.log(form);
-     
-    if ( form.invalid ) {
+
+  if (form.invalid){
+    console.log("Error");
+    return;
+  }
+
+    if (this.heroe.id) {
       console.log("formulario");
-      
-      return;
+      this.heroesService.actualizarHeroe(this.heroe).subscribe(resp => {
+        console.log(resp);
+      });
     }
-    this.heroesService.crearHeroe(this.heroe).subscribe ( resp => {
-      console.log(resp);
-      
-    });
+    else {
+      this.heroesService.crearHeroe(this.heroe).subscribe(resp => {
+        console.log(resp);
+        this.heroe = resp;
+      });
+    }
   }
 
 }
